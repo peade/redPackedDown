@@ -4,12 +4,13 @@
         if (options) {
             _this.options = {
                 container: options.container || '#container',
-                timeLong:options.timeLong || 200,
+                timeLong:options.timeLong || 500,
                 imgs: options.imgs || '',
-                imgWidth: options.imgWidth || '80px',
+                imgWidth: options.imgWidth || 80,
                 height: window.screen.height,
                 width: window.screen.width
             }
+            _this.options.lastLeft=0;
 
         } else {
             return false
@@ -29,11 +30,17 @@
             var imgEle = document.createElement('img');
             imgEle.src = _this.options.imgs[srcIndex]
             imgEle.style.position = "fixed"
+            var left=Math.random() * _this.options.width;
 
-            imgEle.style.left = Math.random() * _this.options.width + 'px'
-            console.log(imgEle.style.left)
-            imgEle.style.top = Math.random() * -200 + 'px'
-            imgEle.style.width=_this.options.imgWidth
+            if(left<_this.options.lastLeft+_this.options.imgWidth && left>_this.options.lastLeft-_this.options.imgWidth){
+                left=_this.options.lastLeft+_this.options.imgWidth
+            }
+            imgEle.style.left =left + 'px'
+
+            _this.options.lastLeft=left
+
+            imgEle.style.top = Math.random() * -300 + 'px'
+            imgEle.style.width=_this.options.imgWidth+'px'
             container.appendChild(imgEle)
             _this.down(imgEle)
 
@@ -47,7 +54,7 @@
                     container.removeChild(el)
                     clearInterval(timer)
                 } else {
-                    top=top+2;
+                    top=top+4;
                     el.style.top = top+ 'px'
                 }
             }, 10);
@@ -62,7 +69,7 @@
                     start+=10;
                     _this.addImg()
                 }
-            },200)
+            },10)
         }
     }
 
